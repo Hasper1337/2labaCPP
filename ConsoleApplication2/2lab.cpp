@@ -9,6 +9,11 @@ private:
     int blue;
 
     static int colorCount;
+
+    static int limit(int value) {
+        return max(0, min(255, value));
+    }
+
 public:
 
     RGBColor() : red(0), green(0), blue(0) { // Конструктор по умолчанию черный цвет(0, 0, 0)
@@ -19,12 +24,18 @@ public:
         colorCount++;
     }
 
-    RGBColor(int r, int g) : red(r), green(g), blue(255) { // Конструктор с параметрами(r, g, 250)
+    RGBColor(int r, int g) : red(r), green(g), blue(250) { // Конструктор с параметрами(r, g, 250)
         colorCount++;
     }
 
+    ~RGBColor() { // Деструктор
+        colorCount--;
+        cout << "Removed color RGB(" << red << ", " << green << ", " << blue << ")" << endl;
+    }
+
+
     void Print(){
-        cout << "Создан цвет со следующими параметрами r = " << red << "\t g = " << green << "\t b = " << blue << endl;
+        cout << "A color was created with the following parameters RGB(" << red << ", " << green << ", " << blue << ")" << endl;
     }
 
     int SetR(int valueR) {
@@ -39,15 +50,50 @@ public:
         blue = valueB;
     }
 
+    static int getColorCount() {
+        return colorCount;
+    }
+
     // перегрузки //
 
+    RGBColor& operator++() { // префикс инкремент
+        red = limit(++red);
+        green = limit(++green);
+        blue = limit(++blue);
+        return *this;
+    }
+
+    RGBColor& operator++(int) { // постфикс инкремент
+        red = limit(red++);
+        green = limit(green++);
+        blue = limit(blue++);
+        return *this;
+    }
+
+    RGBColor& operator--() { // префикс декримент
+        red = limit(--red);
+        green = limit(--green);
+        blue = limit(--blue);
+        return *this;
+    }
+
+    RGBColor operator--(int) { // постфикс декримент
+        red = limit(red--);
+        green = limit(green--);
+        blue = limit(blue--);
+        return *this;
+    }
 
 };
 
-
+int RGBColor::colorCount = 0;
 
 int main()
 {
-    RGBColor a;
+    RGBColor a(20, 20);
+    ++a;
     a.Print();
+
+    cout << "Total number of colors created in the palette: " << RGBColor::getColorCount() << endl;
+    return 0;
 }
