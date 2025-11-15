@@ -56,6 +56,7 @@ public:
 
     // перегрузки //
 
+    // унарные операции
     RGBColor& operator++() { // префикс инкремент
         red = limit(++red);
         green = limit(++green);
@@ -77,11 +78,47 @@ public:
         return *this;
     }
 
-    RGBColor operator--(int) { // постфикс декримент
+    RGBColor& operator--(int) { // постфикс декримент
         red = limit(red--);
         green = limit(green--);
         blue = limit(blue--);
         return *this;
+    }
+
+    // арифметическое присваивание
+
+    RGBColor& operator+=(const RGBColor& other) {
+        red += limit((red + other.red) / 2);
+        green += limit((green + other.green) / 2);
+        blue += limit((blue + other.blue) / 2);
+    }
+
+    RGBColor& operator-=(const RGBColor& other) {
+        red -= limit((red - other.red) / 2);
+        green -= limit((green - other.green) / 2);
+        blue -= limit((blue - other.blue) / 2);
+    }
+
+    RGBColor& operator=(const RGBColor& other) {
+        if (this != &other) {
+            red = other.red;
+            green = other.green;
+            blue = other.blue;
+       }
+        return *this;
+    }
+
+    RGBColor& operator/=(const RGBColor& other) {
+        red /= limit(red / other.red);
+        green /= limit(green / other.green);
+        blue /= limit(blue / other.blue);
+    }
+
+    // бинарные
+
+    friend RGBColor operator+(RGBColor lhs, const RGBColor& rhs) {
+        lhs += rhs;
+        return lhs;
     }
 
 };
