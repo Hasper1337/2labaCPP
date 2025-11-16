@@ -34,7 +34,7 @@ public:
     }
 
 
-    void print(){
+    void print() {
         cout << "A color was created with the following parameters RGB(" << red << ", " << green << ", " << blue << ")" << endl;
     }
 
@@ -90,16 +90,16 @@ public:
     // арифметическое присваивание
 
     RGBColor& operator+=(const RGBColor& other) {
-        red = limit(red + other.red);
-        green = limit(green + other.green);
-        blue = limit(blue + other.blue);
+        limit(red += other.red);
+        limit(green += other.green);
+        limit(blue += other.blue);
         return *this;
     }
 
     RGBColor& operator-=(const RGBColor& other) {
-        red = limit(red - other.red);
-        green = limit(green - other.green);
-        blue = limit(blue - other.blue);
+        limit(red -= other.red);
+        limit(green -= other.green);
+        limit(blue -= other.blue);
         return *this;
     }
 
@@ -108,25 +108,61 @@ public:
             red = other.red;
             green = other.green;
             blue = other.blue;
-       }
+        }
         return *this;
     }
 
     RGBColor& operator/=(const RGBColor& other) { // убрать прикол с делением на ноль
-            red = limit(red / other.red);
-            green = limit(green / other.green);
-            blue = limit(blue / other.blue);
-            return *this;
+        limit(red /= other.red);
+        limit(green /= other.green);
+        limit(blue /= other.blue);
+        return *this;
     }
 
     // бинарные
 
-    friend RGBColor operator+(RGBColor lhs, const RGBColor& rhs) {
-        lhs += rhs;
+    friend RGBColor operator+(RGBColor lhs, const RGBColor& other) { // при сложении может быть >255 пока хз как испарвить
+        lhs += other;
         return lhs;
     }
 
+    friend RGBColor operator-(RGBColor lhs, const RGBColor& other) {
+        lhs -= other;
+        return lhs;
+    }
+
+    friend RGBColor operator/(RGBColor lhs, const RGBColor& other) {
+        lhs /= other;
+        return lhs;
+    }
+    
+    // bool
+    bool operator==(const RGBColor& other) {
+        return (red == other.red) && (green == other.green) && (blue == other.blue);
+    };
+
+    bool operator!=(const RGBColor& other) {
+        return !(*this == other);
+    };
+
+    bool operator>(const RGBColor& other) {
+        return (red > other.red) && (green > other.green) && (blue > other.blue);
+	};
+
+    bool operator<(const RGBColor& other) {
+        return (red < other.red) && (green < other.green) && (blue < other.blue);
+    }
+
+    bool operator>=(const RGBColor& other) {
+        return *this >= other;
+	};
+
+    bool operator<=(const RGBColor& other) {
+        return *this <= other;
+    }
+		
 };
+
 
 int RGBColor::colorCount = 0;
 
@@ -143,13 +179,26 @@ int main()
     RGBColor red(255, 0, 0);
     RGBColor green(0, 255, 0);
     RGBColor b(100, 100, 100);
+	RGBColor c(50, 50, 50);
 
     RGBColor mixed(red);
-    mixed += green;
-    mixed -= green;
-    mixed = b;
-    mixed /= b;
-    mixed.print();
+ //   mixed += green;
+ //   mixed.print();
+ //   mixed -= green;
+ //   mixed.print();
+ //   mixed = b;
+ //   mixed.print();
+ //   mixed /= b;
+ //   mixed.print();
+	//mixed = mixed + red;
+	//mixed.print();
+	//mixed = mixed - red;
+	//mixed.print();
+    mixed = c;
+    if (mixed < b) {
+        cout << "mixed is less than b" << endl;
+    };
+
 
     cout << "Total number of colors created in the palette: " << RGBColor::getColorCount() << endl;
     return 0;
