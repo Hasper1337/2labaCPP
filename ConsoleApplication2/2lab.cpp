@@ -20,11 +20,11 @@ public:
         colorCount++;
     }
 
-    RGBColor(int r, int g, int b) : red(r), green(g), blue(b) { // Конструктор с параметрами
+    RGBColor(int r, int g, int b) : red(limit(r)), green(limit(g)), blue(limit(b)) { // Конструктор с параметрами
         colorCount++;
     }
 
-    RGBColor(int r, int g) : red(r), green(g), blue(250) { // Конструктор с параметрами(r, g, 250)
+    RGBColor(const RGBColor& other) : red(other.red), green(other.green), blue(other.blue) { // Конструктор копирования
         colorCount++;
     }
 
@@ -34,7 +34,7 @@ public:
     }
 
 
-    void Print(){
+    void print(){
         cout << "A color was created with the following parameters RGB(" << red << ", " << green << ", " << blue << ")" << endl;
     }
 
@@ -64,11 +64,12 @@ public:
         return *this;
     }
 
-    RGBColor& operator++(int) { // постфикс инкремент
-        red = limit(red++);
-        green = limit(green++);
-        blue = limit(blue++);
-        return *this;
+    RGBColor operator++(int) { // постфикс инкремент
+        RGBColor temp(*this);
+        red = limit(red + 1);
+        green = limit(green + 1);
+        blue = limit(blue + 1);
+        return temp;
     }
 
     RGBColor& operator--() { // префикс декримент
@@ -78,11 +79,12 @@ public:
         return *this;
     }
 
-    RGBColor& operator--(int) { // постфикс декримент
-        red = limit(red--);
-        green = limit(green--);
-        blue = limit(blue--);
-        return *this;
+    RGBColor operator--(int) { // постфикс декримент
+        RGBColor temp(*this);
+        red = limit(red - 1);
+        green = limit(green - 1);
+        blue = limit(blue - 1);
+        return temp;
     }
 
     // арифметическое присваивание
@@ -127,9 +129,17 @@ int RGBColor::colorCount = 0;
 
 int main()
 {
-    RGBColor a(20, 20);
-    ++a;
-    a.Print();
+    //RGBColor a(20, 20, 20);
+    //++a;
+    //a.print();
+
+    //RGBColor temp(a++);
+    //temp.print();
+    //a.print();
+
+    RGBColor red(255, 0, 0);
+    RGBColor green(0, 255, 0);
+    RGBColor blue(0, 0, 255);
 
     cout << "Total number of colors created in the palette: " << RGBColor::getColorCount() << endl;
     return 0;
