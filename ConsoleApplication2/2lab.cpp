@@ -90,15 +90,17 @@ public:
     // арифметическое присваивание
 
     RGBColor& operator+=(const RGBColor& other) {
-        red += limit((red + other.red) / 2);
-        green += limit((green + other.green) / 2);
-        blue += limit((blue + other.blue) / 2);
+        red = limit(red + other.red);
+        green = limit(green + other.green);
+        blue = limit(blue + other.blue);
+        return *this;
     }
 
     RGBColor& operator-=(const RGBColor& other) {
-        red -= limit((red - other.red) / 2);
-        green -= limit((green - other.green) / 2);
-        blue -= limit((blue - other.blue) / 2);
+        red = limit(red - other.red);
+        green = limit(green - other.green);
+        blue = limit(blue - other.blue);
+        return *this;
     }
 
     RGBColor& operator=(const RGBColor& other) {
@@ -110,10 +112,11 @@ public:
         return *this;
     }
 
-    RGBColor& operator/=(const RGBColor& other) {
-        red /= limit(red / other.red);
-        green /= limit(green / other.green);
-        blue /= limit(blue / other.blue);
+    RGBColor& operator/=(const RGBColor& other) { // убрать прикол с делением на ноль
+            red = limit(red / other.red);
+            green = limit(green / other.green);
+            blue = limit(blue / other.blue);
+            return *this;
     }
 
     // бинарные
@@ -139,7 +142,14 @@ int main()
 
     RGBColor red(255, 0, 0);
     RGBColor green(0, 255, 0);
-    RGBColor blue(0, 0, 255);
+    RGBColor b(100, 100, 100);
+
+    RGBColor mixed(red);
+    mixed += green;
+    mixed -= green;
+    mixed = b;
+    mixed /= b;
+    mixed.print();
 
     cout << "Total number of colors created in the palette: " << RGBColor::getColorCount() << endl;
     return 0;
